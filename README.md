@@ -1,24 +1,6 @@
-# my-app
+# 广告推荐系统前端部分代码
 
-## Project setup
-```
-yarn install
-```
+## 项目介绍
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+该项目是广告推荐系统的前端部分，使用Vue框架，结合Element UI组件库，实现广告推荐系统的用户界面。
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
