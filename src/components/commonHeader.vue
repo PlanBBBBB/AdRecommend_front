@@ -33,7 +33,7 @@ export default{
     align-items: center;
     width: 100%;
     height: 60px;
-    background-color: #333;
+    background-color: #ffffff;
     
     .el-button{
      margin: 0 20px;   

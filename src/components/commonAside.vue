@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
-        :collapse="isCollapse" background-color="#555c66" text-color="#d9dde9" active-text-color="#f5ce7f">
+        :collapse="isCollapse" background-color="#002144" text-color="#ffffff" active-text-color="#387dff">
         <div class="box-title">
             <span>{{ isName }}</span>
         </div>
