@@ -41,6 +41,7 @@
             <el-table-column prop="userId" label="用户id"> </el-table-column>
             <el-table-column prop="adId" label="广告id"> </el-table-column>
             <el-table-column prop="action" label="行为类型"> </el-table-column>
+            <el-table-column prop="waitTime" label="行为时间"> </el-table-column>
             <el-table-column prop="created" label="创建时间"> </el-table-column>
           </el-table>
         </div>

@@ -9,6 +9,7 @@
           <el-radio :label="'500010'"> 协同过滤 </el-radio>
           <el-radio :label="'500020'"> SVD </el-radio>
           <el-radio :label="'500030'"> 位置归一化 </el-radio>
+          <el-radio :label="'500040'"> AI </el-radio>
         </el-radio-group>
       </el-card>
     </el-col>
