@@ -115,72 +115,74 @@
       size="50%"
       :before-close="handleClose"
     >
-      <el-form :model="adForm" ref="adForm" label-width="100px">
-        <el-form-item label="关键词" prop="keywords">
-          <el-cascader
-            v-model="adForm.keywords"
-            placeholder="搜索关键词"
-            :options="keywordOptions"
-            :props="{ multiple: true }"
-            filterable
-          ></el-cascader>
-        </el-form-item>
+      <el-card>
+        <el-form :model="adForm" ref="adForm" label-width="100px">
+          <el-form-item label="关键词" prop="keywords">
+            <el-cascader
+              v-model="adForm.keywords"
+              placeholder="搜索关键词"
+              :options="keywordOptions"
+              :props="{ multiple: true }"
+              filterable
+            ></el-cascader>
+          </el-form-item>
 
-        <el-form-item label="广告图片url" prop="imgUrl">
-          <el-input v-model="adForm.imgUrl"></el-input>
-        </el-form-item>
+          <el-form-item label="广告图片url" prop="imgUrl">
+            <el-input v-model="adForm.imgUrl"></el-input>
+          </el-form-item>
 
-        <el-form-item label="跳转链接url" prop="targetUrl">
-          <el-input v-model="adForm.targetUrl"></el-input>
-        </el-form-item>
+          <el-form-item label="跳转链接url" prop="targetUrl">
+            <el-input v-model="adForm.targetUrl"></el-input>
+          </el-form-item>
 
-        <el-form-item label="投放开始时间" prop="startTime">
-          <el-date-picker
-            v-model="adForm.startTime"
-            type="datetime"
-            placeholder="选择开始时间"
-            format="yyyy-MM-dd HH:mm:ss"
-            value-format="yyyy-MM-dd HH:mm:ss"
-          ></el-date-picker>
-        </el-form-item>
+          <el-form-item label="投放开始时间" prop="startTime">
+            <el-date-picker
+              v-model="adForm.startTime"
+              type="datetime"
+              placeholder="选择开始时间"
+              format="yyyy-MM-dd HH:mm:ss"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            ></el-date-picker>
+          </el-form-item>
 
-        <el-form-item label="投放结束时间" prop="endTime">
-          <el-date-picker
-            v-model="adForm.endTime"
-            type="datetime"
-            placeholder="选择结束时间"
-            format="yyyy-MM-dd HH:mm:ss"
-            value-format="yyyy-MM-dd HH:mm:ss"
-          ></el-date-picker>
-        </el-form-item>
+          <el-form-item label="投放结束时间" prop="endTime">
+            <el-date-picker
+              v-model="adForm.endTime"
+              type="datetime"
+              placeholder="选择结束时间"
+              format="yyyy-MM-dd HH:mm:ss"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            ></el-date-picker>
+          </el-form-item>
 
-        <el-form-item label="广告类型" prop="type">
-          <el-select v-model="adForm.type" placeholder="请选择广告类型">
-            <el-option
-              v-for="item in typeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+          <el-form-item label="广告类型" prop="type">
+            <el-select v-model="adForm.type" placeholder="请选择广告类型">
+              <el-option
+                v-for="item in typeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
 
-        <el-form-item label="位置值" prop="position">
-          <el-select v-model="adForm.position" placeholder="请选择位置值">
-            <el-option
-              v-for="item in positionOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+          <el-form-item label="位置值" prop="position">
+            <el-select v-model="adForm.position" placeholder="请选择位置值">
+              <el-option
+                v-for="item in positionOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
 
-        <div class="btn-container">
-          <el-button type="primary" @click="saveAd">保存</el-button>
-          <el-button @click="showDrawer = false">取消</el-button>
-        </div>
-      </el-form>
+          <div class="btn-container">
+            <el-button type="primary" @click="saveAd">保存</el-button>
+            <el-button @click="showDrawer = false">取消</el-button>
+          </div>
+        </el-form>
+      </el-card>
     </el-drawer>
   </el-row>
 </template>
