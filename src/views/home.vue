@@ -11,7 +11,7 @@
                       <el-input v-model="checkUserForm.name" placeholder="请输入用户昵称"></el-input>
                   </el-form-item>
                   <div class="btn-container">
-                      <el-button type="primary" @click="findUser" class="addBookBtn">
+                      <el-button type="primary" @click="findUser" icon="el-icon-search">
                           查询
                       </el-button>
                   </div>

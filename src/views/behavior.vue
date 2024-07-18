@@ -27,7 +27,7 @@
           </el-form-item>
 
           <div class="btn-container">
-            <el-button type="primary" @click="findBehavior" class="addBookBtn">
+            <el-button type="primary" @click="findBehavior" icon="el-icon-search">
               查询
             </el-button>
           </div>

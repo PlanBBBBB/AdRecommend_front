@@ -252,6 +252,34 @@ export const getDictByDictType = (id) => {
     });
 };
 
+// 根据dictType查询字典包含子字典
+export const getDictWithParent = (id) => {
+    console.log("根据dictType查询字典");
+    return http.post("/common/getDictWithParent", {
+        id: id
+    }, {
+        headers: {
+            "Content-Type": "application/json",
+            "token": localStorage.getItem("token")
+        },
+    }).then((response) => {
+        console.log(response);
+        if (!response.data.success) {
+            alert(response.data.errorMsg);
+            if (response.data.errorMsg === '认证失败请重新登录') {
+                Cookies.remove('token');
+                router.push("/login");
+            }
+            throw new Error(response.data.errorMsg);
+        } else {
+            return response.data;  // 返回响应数据
+        }
+    }).catch((error) => {
+        console.error("Failed to fetch data:", error);
+        throw error;
+    });
+};
+
 
 // 获取当前推荐引擎
 export const getCurrentEngine = () => {
@@ -285,6 +313,34 @@ export const updateCurrentEngine = (dictcode) => {
     console.log("修改当前推荐引擎");
     return http.post("/engine/change", {
         dictcode: dictcode
+    }, {
+        headers: {
+            "Content-Type": "application/json",
+            "token": localStorage.getItem("token")
+        },
+    }).then((response) => {
+        console.log(response);
+        if (!response.data.success) {
+            alert(response.data.errorMsg);
+            if (response.data.errorMsg === '认证失败请重新登录') {
+                Cookies.remove('token');
+                router.push("/login");
+            }
+            throw new Error(response.data.errorMsg);
+        } else {
+            return response.data;  // 返回响应数据
+        }
+    }).catch((error) => {
+        console.error("Failed to fetch data:", error);
+        throw error;
+    });
+}
+
+//根据id删除广告
+export const deleteAdById = (id) => {
+    console.log("删除广告");
+    return http.post("/ad/delete", {
+        id: id
     }, {
         headers: {
             "Content-Type": "application/json",
