@@ -15,7 +15,15 @@ Vue.use(MenuItemGroup);Vue.use(Submenu);Vue.use(Button);Vue.use(Icon);
 Vue.use(Row);Vue.use(Col);Vue.use(Card);Vue.use(Form);Vue.use(FormItem);
 Vue.use(Input);Vue.use(Upload);Vue.use(Dialog);Vue.use(Table);Vue.use(Scrollbar);
 Vue.use(Pagination);Vue.use(TableColumn);Vue.use(DatePicker);Vue.use(Option);Vue.use(Radio);Vue.use(RadioGroup);
-Vue.use(Drawer);Vue.use(Cascader);Vue.use(MessageBox);Vue.use(Message);
+Vue.use(Drawer);Vue.use(Cascader);
+
+
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
+Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$prompt = MessageBox.prompt;
+Vue.prototype.$notify = Notification;
+Vue.prototype.$message = Message;
 
 router.beforeEach((to,from,next) => {
   const token = localStorage.getItem("token")

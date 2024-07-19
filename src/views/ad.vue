@@ -339,7 +339,7 @@ export default {
       this.getAdType();
     },
     confirmDelete(id) {
-      MessageBox.confirm("此操作将永久删除该广告, 是否继续?", "提示", {
+      this.$confirm("此操作将永久删除该广告, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
@@ -348,7 +348,7 @@ export default {
           this.deleteAd(id);
         })
         .catch(() => {
-          Message({
+          $message({
             type: "info",
             message: "已取消删除",
           });
@@ -358,7 +358,7 @@ export default {
       deleteAdById(id)
         .then((response) => {
           console.log("这个是响应体：", response);
-          Message({
+          $message({
             message: "广告删除成功",
             type: "success",
           });
@@ -369,7 +369,7 @@ export default {
         });
     },
     handleClose(done) {
-      MessageBox.confirm("确认关闭？")
+      this.$confirm("确认关闭？")
         .then((_) => {
           done();
         })
