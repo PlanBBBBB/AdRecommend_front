@@ -4,7 +4,7 @@
       <el-card class="bookCard">
         <h1>推荐引擎管理</h1>
         <br />
-        <el-radio-group v-model="dictcode" @change="handleEngineChange">
+        <el-radio-group v-model="dictCode" @change="handleEngineChange">
           <el-radio :label="'500000'"> 基于内容 </el-radio>
           <el-radio :label="'500010'"> 协同过滤 </el-radio>
           <el-radio :label="'500020'"> SVD </el-radio>
@@ -23,8 +23,8 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      dictcode: '',
-      dictname: '',
+      dictCode: '',
+      dictName: '',
     };
   },
   methods: {
@@ -32,8 +32,8 @@ export default {
       try {
         const response = await getCurrentEngine();
         if (response && response.data) {
-          this.dictcode = response.data.dictcode;
-          this.dictname = response.data.dictname;
+          this.dictCode = response.data.dictCode;
+          this.dictName = response.data.dictName;
         } else {
           console.error("Invalid response structure:", response);
         }
