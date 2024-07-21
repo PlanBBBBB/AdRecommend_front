@@ -117,14 +117,26 @@
     >
       <el-card>
         <el-form :model="adForm" ref="adForm" label-width="100px">
+          <el-form-item label="广告类型" prop="type">
+            <el-select v-model="adForm.type" placeholder="请选择广告类型">
+              <el-option
+                v-for="item in typeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          
           <el-form-item label="关键词" prop="keywords">
-            <el-cascader
-              v-model="adForm.keywords"
-              placeholder="搜索关键词"
-              :options="keywordOptions"
-              :props="{ multiple: true }"
-              filterable
-            ></el-cascader>
+            <el-select v-model="adForm.keywords" multiple placeholder="请选择关键词">
+              <el-option
+                v-for="item in keywordOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item label="广告图片url" prop="imgUrl">
@@ -153,17 +165,6 @@
               format="yyyy-MM-dd HH:mm:ss"
               value-format="yyyy-MM-dd HH:mm:ss"
             ></el-date-picker>
-          </el-form-item>
-
-          <el-form-item label="广告类型" prop="type">
-            <el-select v-model="adForm.type" placeholder="请选择广告类型">
-              <el-option
-                v-for="item in typeOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
           </el-form-item>
 
           <el-form-item label="位置值" prop="position">
@@ -195,7 +196,7 @@ import {
   getAdById,
   updateAd,
   getDictByDictType,
-  getDictWithParent,
+  getDictByParent,
 } from "@/api";
 import { mapState } from "vuex";
 export default {
@@ -228,7 +229,7 @@ export default {
       },
       showDrawer: false,
       adForm: {
-        keywords: [],
+        keywords: "",
         imgUrl: "",
         targetUrl: "",
         startTime: "",
@@ -256,12 +257,12 @@ export default {
   methods: {
     openDrawer() {
       this.showDrawer = true;
-      this.getAdKeyWords();
       this.getAdType();
+      this.getAdKeyWords();
     },
     async getAdKeyWords() {
       try {
-        const response = await getDictWithParent(200);
+        const response = await getDictByParent(adForm.type);
         console.log("这个是响应体：", response);
 
         if (response && response.data) {
@@ -269,13 +270,6 @@ export default {
           this.keywordOptions = response.data.map((item) => ({
             label: item.dictname,
             value: item.dictcode,
-            children: item.children
-              ? item.children.map((child) => ({
-                  label: child.dictname,
-                  value: child.dictcode,
-                  children: child.children,
-                }))
-              : [],
           }));
         } else {
           console.error("Invalid response structure:", response);

@@ -363,3 +363,101 @@ export const deleteAdById = (id) => {
         throw error;
     });
 }
+
+// 新增广告
+export const addAd = (keyWords, imgUrl, targetUrl, startTime, endTime, type, position) => {
+    console.log("新增广告");
+    return http.post("/ad/add", {
+        keyWords: keyWords,
+        imgUrl: imgUrl,
+        targetUrl: targetUrl,
+        startTime: startTime,
+        endTime: endTime,
+        type: type,
+        position: position
+    }, {
+        headers: {
+            "Content-Type": "application/json",
+            "token": localStorage.getItem("token")
+        },
+    }).then((response) => {
+        console.log(response);
+        if (!response.data.success) {
+            alert(response.data.errorMsg);
+            if (response.data.errorMsg === '认证失败请重新登录') {
+                Cookies.remove('token');
+                router.push("/login");
+            }
+            throw new Error(response.data.errorMsg);
+        } else {
+            return response.data;  // 返回响应数据
+        }
+    }).catch((error) => {
+        console.error("Failed to fetch data:", error);
+        throw error;
+    });
+}
+
+// 更新广告
+export const updateAd = (id, keyWords, imgUrl, targetUrl, startTime, endTime, type, position) => {
+    console.log("更新广告");
+    return http.post("/ad/add", {
+        id: id,
+        keyWords: keyWords,
+        imgUrl: imgUrl,
+        targetUrl: targetUrl,
+        startTime: startTime,
+        endTime: endTime,
+        type: type,
+        position: position
+    }, {
+        headers: {
+            "Content-Type": "application/json",
+            "token": localStorage.getItem("token")
+        },
+    }).then((response) => {
+        console.log(response);
+        if (!response.data.success) {
+            alert(response.data.errorMsg);
+            if (response.data.errorMsg === '认证失败请重新登录') {
+                Cookies.remove('token');
+                router.push("/login");
+            }
+            throw new Error(response.data.errorMsg);
+        } else {
+            return response.data;  // 返回响应数据
+        }
+    }).catch((error) => {
+        console.error("Failed to fetch data:", error);
+        throw error;
+    });
+}
+
+
+// 根据parentCode查询字典
+export const getDictByParent = (id) => {
+    console.log("根据dictType查询字典");
+    return http.post("/common/getDictByParent", {
+        id: id
+    }, {
+        headers: {
+            "Content-Type": "application/json",
+            "token": localStorage.getItem("token")
+        },
+    }).then((response) => {
+        console.log(response);
+        if (!response.data.success) {
+            alert(response.data.errorMsg);
+            if (response.data.errorMsg === '认证失败请重新登录') {
+                Cookies.remove('token');
+                router.push("/login");
+            }
+            throw new Error(response.data.errorMsg);
+        } else {
+            return response.data;  // 返回响应数据
+        }
+    }).catch((error) => {
+        console.error("Failed to fetch data:", error);
+        throw error;
+    });
+};
