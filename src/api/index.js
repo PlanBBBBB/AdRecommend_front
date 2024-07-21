@@ -401,7 +401,7 @@ export const addAd = (keyWords, imgUrl, targetUrl, startTime, endTime, type, pos
 // 更新广告
 export const updateAd = (id, keyWords, imgUrl, targetUrl, startTime, endTime, type, position) => {
     console.log("更新广告");
-    return http.post("/ad/add", {
+    return http.post("/ad/update", {
         id: id,
         keyWords: keyWords,
         imgUrl: imgUrl,
