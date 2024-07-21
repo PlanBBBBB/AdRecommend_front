@@ -110,7 +110,7 @@
 
     <!-- Drawer for adding/editing an ad -->
     <el-drawer
-      title="新增广告"
+      :title="title"
       :visible.sync="showDrawer"
       size="50%"
       :before-close="handleClose"
@@ -118,7 +118,7 @@
       <el-card>
         <el-form :model="adForm" ref="adForm" label-width="100px">
           <el-form-item label="广告类型" prop="type">
-            <el-select v-model="adForm.type" placeholder="请选择广告类型">
+            <el-select v-model="adForm.type" placeholder="请选择广告类型" @change="getAdKeyWords()">
               <el-option
                 v-for="item in typeOptions"
                 :key="item.value"
@@ -227,15 +227,9 @@ export default {
           { min: 1, max: 15, message: "长度在1-15个字符", trigger: "blur" },
         ],
       },
+      title: "",
       showDrawer: false,
       adForm: {
-        keywords: "",
-        imgUrl: "",
-        targetUrl: "",
-        startTime: "",
-        endTime: "",
-        type: "",
-        position: "",
       },
       keywordOptions: [],
       typeOptions: [],
@@ -256,13 +250,14 @@ export default {
   },
   methods: {
     openDrawer() {
+      this.title = "新增广告";
       this.showDrawer = true;
       this.getAdType();
       this.getAdKeyWords();
     },
     async getAdKeyWords() {
       try {
-        const response = await getDictByParent(adForm.type);
+        const response = await getDictByParent(this.adForm.type);
         console.log("这个是响应体：", response);
 
         if (response && response.data) {
@@ -328,9 +323,13 @@ export default {
     },
     editAd(ad) {
       this.currentAdId = ad.id;
-      this.adForm = { ...ad, keywords: ad.keyWords }; // Assuming ad.keyWords is the correct field
+      
+      this.adForm = { ...ad }; // Assuming ad.keyWords is the correct field
+      this.adForm.keywords = this.adForm.keyWords.split(',');
+      console.log(1, this.adForm);
       this.showDrawer = true;
       this.getAdType();
+      this.title = "编辑广告";
     },
     confirmDelete(id) {
       this.$confirm("此操作将永久删除该广告, 是否继续?", "提示", {
