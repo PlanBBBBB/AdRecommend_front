@@ -11,7 +11,7 @@
 
       <div class="login-right">
         <div class="login-title flex-xy">
-          <span>AIGC 广告推荐系统后台登录</span>
+          <span>AIGC 广告推荐后台管理系统</span>
           <span class="login-title-en">welcome to the system</span>
         </div>
 
