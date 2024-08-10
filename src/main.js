@@ -27,8 +27,8 @@ Vue.prototype.$message = Message;
 
 router.beforeEach((to,from,next) => {
   const token = localStorage.getItem("token")
-  if(!token && to.path !== '/login'&& to.path!=="/register"){
-    next({name:'login'})
+  if(!token && to.path !== '/login'&& to.path!=="/userLogin" && to.path!=='/userRegister'){
+    next({name:'userLogin'})
   }else{
     next()
   }

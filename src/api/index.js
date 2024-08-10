@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import store from '@/store'
 import { Alert } from 'element-ui';
 
-//请求登录
+//管理员请求登录
 export const landing = (username, password) => {
     console.log("开始登录")
     return http.post("/common/login", {
@@ -26,15 +26,38 @@ export const landing = (username, password) => {
         })
 }
 
+
+//用户请求登录
+export const userLanding = (username, password) => {
+    console.log("开始登录")
+    return http.post("/common/login", {
+        // body传参
+        username: username,
+        password: password,
+    })
+        .then((response) => {
+            console.log(response);
+            console.log(username + password);
+            if (!response.data.success) {
+                alert(response.data.errorMsg)
+            } else {
+                console.log(response)
+                // 存token
+                localStorage.setItem("token", response.data.data)
+                router.push('/userIndex')
+            }
+        })
+}
+
 // 请求注册
-export const registering = (email, name, username, password) => {
+export const registering = (username, password, name, interest) => {
     console.log("开始注册")
     return http.post("/common/register", {
         // body传参
-        email: email,
-        name: name,
         username: username,
         password: password,
+        name: name,
+        interest: interest
     })
         .then((response) => {
             console.log(response)
@@ -45,7 +68,7 @@ export const registering = (email, name, username, password) => {
                 alert("注册成功，请返回登录！")
                 // 存Cokkies
                 Cookies.set('token', response.data.data)
-                router.push('/login')
+                router.push('/userLogin')
             }
         });
 }
