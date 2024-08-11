@@ -31,10 +31,10 @@ const routes = [
         name: 'main',
         component: main,
         children: [
-            { path: 'home', component: home, name: 'home' },
-            { path: 'ad', component: ad, name: 'ad' },
-            { path: 'engine', component: engine, name: 'engine' },
-            { path: 'behavior', component: behavior, name: 'behavior' }
+            {path: 'home', component: home, name: 'home'},
+            {path: 'ad', component: ad, name: 'ad'},
+            {path: 'engine', component: engine, name: 'engine'},
+            {path: 'behavior', component: behavior, name: 'behavior'}
         ]
     },
     // 配置用户登录路由
@@ -43,16 +43,20 @@ const routes = [
         name: 'userLogin',
         component: userLogin
     },
-    // 配置用户相关的子路由
     {
-        path: '/user',
-        name: 'user',
-        component: userLogin,
-        children: [
-            { path: 'index', component: userIndex, name: 'userIndex' },
-            { path: 'register', component: userRegister, name: 'userRegister' },
-            { path: 'info', component: userInfo, name: 'userInfo' }
-        ]
+        path: '/index',
+        component: userIndex,
+        name: 'userIndex'
+    },
+    {
+        path: '/register',
+        component: userRegister,
+        name: 'userRegister'
+    },
+    {
+        path: '/info',
+        component: userInfo,
+        name: 'userInfo'
     }
 ];
 

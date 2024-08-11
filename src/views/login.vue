@@ -52,12 +52,15 @@
         </el-form>
       </div>
     </div>
+    <div @click="openNewPage" class="new-page">
+      备案号：粤ICP备2024295504号
+    </div>
   </div>
 </template>
   
-  <script>
-import router from "../router";
+<script>
 import { landing } from "../api/index";
+import router from "@/router";
 export default {
   data() {
     return {
@@ -81,8 +84,8 @@ export default {
   methods: {
     async land() {
       if (
-        this.ruleForm.username == "" ||
-        this.ruleForm.password == "" ||
+        this.ruleForm.username === "" ||
+        this.ruleForm.password === "" ||
         this.ruleForm.username.length > 10 ||
         this.ruleForm.password.length > 10 ||
         this.ruleForm.username.length < 3 ||
@@ -92,14 +95,19 @@ export default {
       } else {
         console.log("前往登录");
         await landing(this.ruleForm.username, this.ruleForm.password);
+        await router.push('/main/home')
         console.log("到我了");
       }
     },
+    openNewPage () {
+      window.open("https://beian.miit.gov.cn/ ", "_blank");
+    },
+
   },
 };
 </script>
   
-  <style scoped>
+<style scoped>
 html, body {
   height: 100%;
   margin: 0;
@@ -206,5 +214,14 @@ html, body {
   background: linear-gradient(180deg, #35abff 0%, #1c91ff 99%);
 }
 
+.new-page {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+}
 </style>
   

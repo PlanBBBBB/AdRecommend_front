@@ -1,77 +1,136 @@
 <template>
-  <view class="t-login">
+  <div class="t-login">
     <!-- 页面装饰图片 -->
-    <image class="img-a" src="@/assets/login/2.png" alt="login/2.png"></image>
-    <image class="img-b" src="@/assets/login/3.png"></image>
+    <img src="@/assets/login/2.png" alt="login/2.png" class="img-a">
+    <img src="@/assets/login/3.png" alt="login/3.png" class="img-b">
     <!-- 标题 -->
-    <view class="t-b">欢迎回来！</view>
-    <form class="cl">
-      <view class="t-a">
-        <image src="@/assets/login/sj.png"></image>
-        <input
-          type="number"
-          name="username"
-          placeholder="请输入账号"
-          maxlength="11"
-          v-model="ruleForm.username"
-        />
-      </view>
-      <view class="t-a">
-        <image src="@/assets/login/yz.png"></image>
-        <input
-          type="number"
-          name="password"
-          maxlength="6"
-          placeholder="请输入密码"
-          v-model="ruleForm.password"
-        />
-      </view>
-      <view class="t-a">
-        <image src="@/assets/login/sj.png"></image>
-        <input
-          type="text"
-          name="name"
-          placeholder="请输入昵称"
-          maxlength="11"
-          v-model="ruleForm.name"
-        />
-      </view>
-      <button @click="land">注 册</button>
-    </form>
-  </view>
+    <div class="t-b">欢迎回来！</div>
+    <el-form class="cl" :model="ruleForm" :rules="rules" ref="ruleForm">
+      <div class="t-a">
+        <img src="@/assets/login/sj.png" alt="login/sj.png">
+        <el-form-item label="" prop="username">
+          <el-input
+              type="number"
+              placeholder="请输入账号"
+              maxlength="11"
+              v-model="ruleForm.username"
+              clearable
+              @keyup.enter.native="land">
+          </el-input>
+        </el-form-item>
+      </div>
+      <div class="t-a">
+        <img src="@/assets/login/yz.png" alt="login/yz.png">
+        <el-form-item label="" prop="password">
+          <el-input
+              type="password"
+              placeholder="请输入密码"
+              maxlength="6"
+              v-model="ruleForm.password"
+              clearable
+              @keyup.enter.native="land">
+          </el-input>
+        </el-form-item>
+      </div>
+      <div class="t-a">
+        <img src="@/assets/login/yz.png" alt="login/yz.png">
+        <el-form-item label="" prop="name">
+          <el-input
+              type="text"
+              placeholder="请输入昵称"
+              maxlength="10"
+              v-model="ruleForm.name"
+              clearable
+              @keyup.enter.native="land">
+          </el-input>
+        </el-form-item>
+      </div>
+      <div class="t-a">
+        <img src="@/assets/login/yz.png" alt="login/yz.png">
+        <el-form-item label="" prop="interest">
+          <el-select>
+
+          </el-select>
+          <el-input
+              type="text"
+              placeholder="请输入昵称"
+              maxlength="10"
+              v-model="ruleForm.name"
+              clearable
+              @keyup.enter.native="land">
+          </el-input>
+        </el-form-item>
+      </div>
+      <el-button @click="land" :loading="isLoading">注 册</el-button>
+    </el-form>
+
+    <div @click="linkLogin" class="register">
+      已有账号？点我登录
+    </div>
+    <div @click="openNewPage" class="new-page">
+      备案号：粤ICP备2024295504号
+    </div>
+  </div>
 </template>
 
 <script>
-import { registering } from "../api/index";
+import {registering} from "../api/index";
+import router from '@/router';
 
 export default {
   data() {
     return {
       ruleForm: {
-        username: "",
-        password: "",
-        name: "",
-        interest: ""
+        username: '',
+        password: '',
+        name: '',
+        interest: ''
       },
-      rules: {},
+      rules: {
+        username: [
+          {required: true, message: "请输入账号", trigger: "blur"},
+          {min: 3, max: 10, message: "长度在3-10个字符", trigger: "blur"},
+        ],
+        password: [
+          {required: true, message: "请输入密码", trigger: "blur"},
+          {min: 3, max: 10, message: "长度在3-10个字符", trigger: "blur"},
+        ],
+        name: [
+          {required: true, message: "请输入昵称", trigger: "blur"},
+          {min: 3, max: 10, message: "长度在3-10个字符", trigger: "blur"},
+        ],
+        interest: [
+          {required: true}
+        ]
+      },
       isLoading: false,
     };
   },
   methods: {
     async land() {
-      if (this.ruleForm.username === "" || this.ruleForm.password === "" || this.ruleForm.name === "" || this.ruleForm.interest === "") {
-        alert("请检查账号,密码,昵称，兴趣标签等是否正确！");
+      if (
+          this.ruleForm.username === "" ||
+          this.ruleForm.password === "" ||
+          this.ruleForm.username.length > 10 ||
+          this.ruleForm.password.length > 10 ||
+          this.ruleForm.username.length < 3 ||
+          this.ruleForm.password.length < 3 ||
+          this.ruleForm.name.length > 10 ||
+          this.ruleForm.password.length < 3
+      ) {
+        alert("请检查账号和密码！");
       } else {
-        this.isLoading = true;
-        try {
-          await registering(this.ruleForm.username, this.ruleForm.password, this.ruleForm.name, this.ruleForm.interest);
-          this.isLoading = false;
-        } catch (error) {
-          this.isLoading = false;
-          alert("登录失败，请重试！");
-        }
+        console.log("前往注册");
+        await registering(this.ruleForm.username, this.ruleForm.password, this.ruleForm.name, this.ruleForm.interest);
+        console.log("到我了");
       }
     },
+    openNewPage() {
+      window.open("https://beian.miit.gov.cn/ ", "_blank");
+    },
+    linkLogin() {
+      router.push('/userLogin');
+    }
   },
 };
 </script>
@@ -83,13 +142,15 @@ export default {
   top: -280rpx;
   right: -100rpx;
 }
+
 .img-b {
   position: absolute;
   width: 50%;
   bottom: 0;
-  left: -50rpx;
+  left: 0;
   margin-bottom: -200rpx;
 }
+
 .t-login {
   width: 600rpx;
   margin: 0 auto;
@@ -201,5 +262,20 @@ export default {
   visibility: hidden;
   height: 0;
   content: "\20";
+}
+
+.register {
+  font-size: 14px;
+  color: blue;
+}
+
+.new-page {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  color: blue;
+  cursor: pointer;
 }
 </style>

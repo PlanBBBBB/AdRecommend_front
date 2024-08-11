@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const http = axios.create({
-    baseURL : 'http://116.198.241.204:10889/adRecommend',
+    baseURL : 'http://localhost:10889/adRecommend',
     timeout : 10000,
     withCredentials :true
 })

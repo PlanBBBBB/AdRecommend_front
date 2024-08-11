@@ -2,7 +2,6 @@ import http from '../utils/request'
 import router from '@/router';
 import Cookies from 'js-cookie';
 import store from '@/store'
-import { Alert } from 'element-ui';
 
 //管理员请求登录
 export const landing = (username, password) => {
@@ -21,30 +20,6 @@ export const landing = (username, password) => {
                 console.log(response)
                 // 存token
                 localStorage.setItem("token", response.data.data)
-                router.push('/main/home')
-            }
-        })
-}
-
-
-//用户请求登录
-export const userLanding = (username, password) => {
-    console.log("开始登录")
-    return http.post("/common/login", {
-        // body传参
-        username: username,
-        password: password,
-    })
-        .then((response) => {
-            console.log(response);
-            console.log(username + password);
-            if (!response.data.success) {
-                alert(response.data.errorMsg)
-            } else {
-                console.log(response)
-                // 存token
-                localStorage.setItem("token", response.data.data)
-                router.push('/userIndex')
             }
         })
 }
@@ -360,10 +335,11 @@ export const updateCurrentEngine = (dictcode) => {
 }
 
 //根据id删除广告
-export const deleteAdById = (id) => {
-    console.log("删除广告");
-    return http.post("/ad/delete", {
-        id: id
+export const upStatus = (id, status) => {
+    console.log("启停广告");
+    return http.post("/ad/upStatus", {
+        id: id,
+        status: status
     }, {
         headers: {
             "Content-Type": "application/json",
@@ -388,10 +364,10 @@ export const deleteAdById = (id) => {
 }
 
 // 新增广告
-export const addAd = (keyWords, imgUrl, targetUrl, startTime, endTime, type, position) => {
+export const addAd = (keyWordsStr, imgUrl, targetUrl, startTime, endTime, type, position) => {
     console.log("新增广告");
     return http.post("/ad/add", {
-        keyWords: keyWords,
+        keyWords: keyWordsStr,
         imgUrl: imgUrl,
         targetUrl: targetUrl,
         startTime: startTime,
@@ -422,11 +398,11 @@ export const addAd = (keyWords, imgUrl, targetUrl, startTime, endTime, type, pos
 }
 
 // 更新广告
-export const updateAd = (id, keyWords, imgUrl, targetUrl, startTime, endTime, type, position) => {
+export const updateAd = (id, keyWordsStr, imgUrl, targetUrl, startTime, endTime, type, position) => {
     console.log("更新广告");
     return http.post("/ad/update", {
         id: id,
-        keyWords: keyWords,
+        keyWords: keyWordsStr,
         imgUrl: imgUrl,
         targetUrl: targetUrl,
         startTime: startTime,
