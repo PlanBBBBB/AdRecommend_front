@@ -32,28 +32,28 @@ export default {
         return {
             adminMenuData: [
                 {
-                    path: '/home',
+                    path: '/main/home',
                     name: "home",
                     label: "用户管理",
                     icon: "s-home",
                     url: "home/home"
                 },
                 {
-                    path: '/ad',
+                    path: '/main/ad',
                     name: "ad",
                     label: "广告管理",
                     icon: "search",
                     url: "home/home"
                 },
                 {
-                    path: '/engine',
+                    path: '/main/engine',
                     name: "engine",
                     label: "推荐引擎",
                     icon: "s-management",
                     url: "home/home"
                 },
                 {
-                    path: '/behavior',
+                    path: '/main/behavior',
                     name: "behavior",
                     label: "行为日志",
                     icon: "s-comment",
@@ -70,6 +70,7 @@ export default {
             console.log(key, keyPath);
         },
         gotoPage(path){
+            console.log(path);
             if(this.$route.path !== path && !(this.$root.path === '/home' && (path === '/'))){
                 this.$router.push(path);
             }

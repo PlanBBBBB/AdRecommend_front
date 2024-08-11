@@ -21,7 +21,7 @@ export const landing = (username, password) => {
                 console.log(response)
                 // 存token
                 localStorage.setItem("token", response.data.data)
-                router.push('/home')
+                router.push('/main/home')
             }
         })
 }
