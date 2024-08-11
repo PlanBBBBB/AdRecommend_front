@@ -4,64 +4,22 @@
     <image class="img-a" src="@/assets/login/2.png" alt="login/2.png"></image>
     <image class="img-b" src="@/assets/login/3.png"></image>
     <!-- 标题 -->
-    <view class="t-b">欢迎回来！</view>
-    <form class="cl">
-      <view class="t-a">
-        <image src="@/assets/login/sj.png"></image>
-        <input
-          type="number"
-          name="username"
-          placeholder="请输入账号"
-          maxlength="11"
-          v-model="ruleForm.username"
-        />
-      </view>
-      <view class="t-a">
-        <image src="@/assets/login/yz.png"></image>
-        <input
-          type="number"
-          name="password"
-          maxlength="6"
-          placeholder="请输入密码"
-          v-model="ruleForm.password"
-        />
-      </view>
-      <button @click="land">登 录</button>
-    </form>
+    <view class="t-b">AI 广告推荐</view>
+    
   </view>
 </template>
 
 <script>
-import { userLanding } from "../api/index";
+import {  } from "../api/index";
 
 export default {
   data() {
     return {
-      ruleForm: {
-        username: "",
-        password: "",
-      },
-      rules: {},
-      isLoading: false,
+    
     };
   },
   methods: {
-    async land() {
-      if (this.ruleForm.username === "" || this.ruleForm.password === "") {
-        alert("请检查账号和密码！");
-      } else {
-        this.isLoading = true;
-        try {
-          await userLanding(this.ruleForm.username, this.ruleForm.password);
-          this.isLoading = false;
-          // 登录成功后跳转到相应的路由
-          // router.push({ name: 'yourDesiredRoute' });
-        } catch (error) {
-          this.isLoading = false;
-          alert("登录失败，请重试！");
-        }
-      }
-    },
+    
   },
 };
 </script>
