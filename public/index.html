@@ -13,5 +13,18 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script>
+      const numberElement = document.getElementById("app");
+      const source = new EventSource('http://116.198.241.204:10889/adRecommend/ad/recommendByAISSe');
+
+      source.onmessage = (event) => {
+          numberElement.innerText = event.data;
+          console.log(111, event.data);
+      };
+
+      source.onerror = (error) => {
+          console.error("SSE error:", error);
+      };
+  </script>
   </body>
 </html>
