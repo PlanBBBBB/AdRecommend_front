@@ -97,7 +97,7 @@ export const outLanding = () => {
 }
 
 // 查看用户个人资料
-export const checking = (context) => {
+export const checking = () => {
     console.log("查看用户个人资料")
     return http.get("/user/check", {
         headers: {
