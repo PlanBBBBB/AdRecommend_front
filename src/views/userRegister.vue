@@ -5,15 +5,15 @@
     <img src="@/assets/login/3.png" alt="login/3.png" class="img-b">
     <!-- 标题 -->
     <div class="t-b">欢迎回来！</div>
-    <el-form class="cl" :model="ruleForm" :rules="rules" ref="ruleForm">
+    <el-form class="cl" :model="registerForm" :rules="rules" ref="registerForm">
       <div class="t-a">
         <img src="@/assets/login/sj.png" alt="login/sj.png">
-        <el-form-item label="" prop="username">
+        <el-form-item label="账号" prop="username">
           <el-input
-              type="number"
+              type="text"
               placeholder="请输入账号"
               maxlength="11"
-              v-model="ruleForm.username"
+              v-model="registerForm.username"
               clearable
               @keyup.enter.native="land">
           </el-input>
@@ -21,12 +21,12 @@
       </div>
       <div class="t-a">
         <img src="@/assets/login/yz.png" alt="login/yz.png">
-        <el-form-item label="" prop="password">
+        <el-form-item label="密码" prop="password">
           <el-input
               type="password"
               placeholder="请输入密码"
               maxlength="6"
-              v-model="ruleForm.password"
+              v-model="registerForm.password"
               clearable
               @keyup.enter.native="land">
           </el-input>
@@ -34,12 +34,12 @@
       </div>
       <div class="t-a">
         <img src="@/assets/login/yz.png" alt="login/yz.png">
-        <el-form-item label="" prop="name">
+        <el-form-item label="昵称" prop="name">
           <el-input
               type="text"
               placeholder="请输入昵称"
               maxlength="10"
-              v-model="ruleForm.name"
+              v-model="registerForm.name"
               clearable
               @keyup.enter.native="land">
           </el-input>
@@ -48,17 +48,17 @@
       <div class="t-a">
         <img src="@/assets/login/yz.png" alt="login/yz.png">
         <el-form-item label="" prop="interest">
-          <el-select>
-
+          <el-select v-model="registerForm.interest"
+                     placeholder="请选择兴趣标签（3到5个）"
+                     clearable
+                     multiple>
+            <el-option
+                v-for="item in interestOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+            ></el-option>
           </el-select>
-          <el-input
-              type="text"
-              placeholder="请输入昵称"
-              maxlength="10"
-              v-model="ruleForm.name"
-              clearable
-              @keyup.enter.native="land">
-          </el-input>
         </el-form-item>
       </div>
       <el-button @click="land" :loading="isLoading">注 册</el-button>
@@ -74,17 +74,18 @@
 </template>
 
 <script>
-import {registering} from "../api/index";
+import {getDictByDictType, registering} from "../api/index";
 import router from '@/router';
 
 export default {
   data() {
     return {
-      ruleForm: {
+      registerForm: {
         username: '',
         password: '',
         name: '',
-        interest: ''
+        interest: [],
+        interestStr: ''
       },
       rules: {
         username: [
@@ -104,25 +105,24 @@ export default {
         ]
       },
       isLoading: false,
+      interestOptions: []
     };
   },
   methods: {
     async land() {
-      if (
-          this.ruleForm.username === "" ||
-          this.ruleForm.password === "" ||
-          this.ruleForm.username.length > 10 ||
-          this.ruleForm.password.length > 10 ||
-          this.ruleForm.username.length < 3 ||
-          this.ruleForm.password.length < 3 ||
-          this.ruleForm.name.length > 10 ||
-          this.ruleForm.password.length < 3
-      ) {
-        alert("请检查账号和密码！");
+      if (this.registerForm.username === "" || this.registerForm.username.length > 10 || this.registerForm.username.length < 3) {
+        alert("请检查账号长度在3-10个字符！");
+      } else if (this.registerForm.password === "" || this.registerForm.password.length > 10 || this.registerForm.name.length < 3) {
+        alert("请检查密码长度在3-10个字符！");
+      } else if (this.registerForm.name === "" || this.registerForm.name.length > 10 || this.registerForm.name.length < 3) {
+        alert("请检查昵称长度在3-10个字符！");
+      } else if (this.registerForm.interest.length < 3 || this.registerForm.interest.length > 5) {
+        alert("请选择3至5个兴趣标签！");
       } else {
         console.log("前往注册");
-        await registering(this.ruleForm.username, this.ruleForm.password, this.ruleForm.name, this.ruleForm.interest);
-        console.log("到我了");
+        this.registerForm.interestStr = this.registerForm.interest.join(',')
+        await registering(this.registerForm.username, this.registerForm.password, this.registerForm.name, this.registerForm.interestStr);
+        this.registerForm.interestStr = ''
       }
     },
     openNewPage() {
@@ -130,8 +130,27 @@ export default {
     },
     linkLogin() {
       router.push('/userLogin');
-    }
+    },
+    async getInterest() {
+      try {
+        const response = await getDictByDictType(300);
+        if (response && response.data) {
+          console.log("这个是data:  ", response.data);
+          this.interestOptions = response.data.map((item) => ({
+            label: item.dictname,
+            value: item.dictcode,
+          }));
+        } else {
+          console.error("Invalid response structure:", response);
+        }
+      } catch (error) {
+        console.error("Failed to fetch options:", error);
+      }
+    },
   },
+  created() {
+    this.getInterest();
+  }
 };
 </script>
 

@@ -10,7 +10,7 @@
         <img src="@/assets/login/sj.png" alt="login/sj.png">
         <el-form-item label="" prop="username">
           <el-input
-              type="number"
+              type="text"
               placeholder="请输入账号"
               maxlength="11"
               v-model="ruleForm.username"
@@ -26,6 +26,7 @@
               type="password"
               placeholder="请输入密码"
               maxlength="6"
+              show-password
               v-model="ruleForm.password"
               clearable
               @keyup.enter.native="land">
@@ -45,14 +46,15 @@
 </template>
 
 <script>
-import {landing} from "../api/index";
+import {userLanding} from "../api/index";
 import router from '@/router';
+
 export default {
   data() {
     return {
       ruleForm: {
-        username: "",
-        password: "",
+        username: '',
+        password: '',
       },
       rules: {
         username: [
@@ -71,18 +73,17 @@ export default {
     async land() {
       if (
           this.ruleForm.username === "" ||
+          this.ruleForm.username === "admin" ||
           this.ruleForm.password === "" ||
           this.ruleForm.username.length > 10 ||
           this.ruleForm.password.length > 10 ||
           this.ruleForm.username.length < 3 ||
           this.ruleForm.password.length < 3
       ) {
-        alert("请检查账号和密码！");
+        alert("请检查账号和密码是否正确！");
       } else {
         console.log("前往登录");
-        await landing(this.ruleForm.username, this.ruleForm.password);
-        await router.push('index')
-        console.log("到我了");
+        await userLanding(this.ruleForm.username, this.ruleForm.password)
       }
     },
     openNewPage() {
@@ -92,6 +93,8 @@ export default {
       router.push('/register');
     }
   },
+  created() {
+  }
 };
 </script>
 

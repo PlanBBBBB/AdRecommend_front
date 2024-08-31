@@ -116,7 +116,7 @@
       <el-card>
         <el-form :model="adForm" ref="adForm" label-width="100px">
           <el-form-item label="广告类型" prop="type">
-            <el-select v-model="adForm.type" placeholder="请选择广告类型" @change="getAdKeyWords()">
+            <el-select v-model="adForm.type" placeholder="请选择广告类型" @change="getAdKeyWords()" clearable>
               <el-option
                   v-for="item in typeOptions"
                   :key="item.value"
@@ -127,7 +127,7 @@
           </el-form-item>
 
           <el-form-item label="关键词" prop="keywords">
-            <el-select v-model="adForm.keyWords" multiple placeholder="请选择关键词">
+            <el-select v-model="adForm.keyWords" multiple placeholder="请选择关键词" clearable>
               <el-option
                   v-for="item in keywordOptions"
                   :key="item.value"
@@ -190,7 +190,6 @@
 import {
   pageAd,
   addAd,
-  deleteAdById,
   updateAd,
   getDictByDictType,
   getDictByParent, upStatus,

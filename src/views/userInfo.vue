@@ -1,174 +1,157 @@
 <template>
-  <view class="t-login">
-    <!-- 页面装饰图片 -->
-    <image class="img-a" src="@/assets/login/2.png" alt="login/2.png"></image>
-    <image class="img-b" src="@/assets/login/3.png"></image>
-    <!-- 标题 -->
-    <view class="t-b">你好！{{}}</view>
-    
-  </view>
+  <div>
+    <h2>AIGC 广告推荐系统</h2>
+    <div>
+      用户名：
+      {{ userForm.userName }}
+      <br>
+      昵称：
+      <el-input v-model="userForm.name" clearable
+                prefix-icon="el-icon-s-custom">
+      </el-input>
+      <br>
+      注册时间：{{ userForm.created }}
+      <br>
+      兴趣标签：
+      <el-select v-model="userForm.interest"
+                 placeholder="请选择兴趣标签（3到5个）"
+                 multiple>
+        <el-option
+            v-for="item in interestOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+        ></el-option>
+      </el-select>
+      <br>
+      <el-button type="primary" @click="upUserInfo">保 存</el-button>
+      <br>
+      <el-button type="danger" @click="outLand">退出登录</el-button>
+
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="bottom-nav">
+      <div class="nav-separator"></div>
+      <el-row>
+        <el-col :span="12">
+          <div class="nav-item" @click="linkToIndex">
+            <img src="@/assets/user/index-active.png" alt="index-active.png" style="width: 24px; height: 24px;">
+            <div class="nav-text">首页</div>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="nav-item" @click="linkToInfo">
+            <img src="@/assets/user/profile-active.png" alt="profile-active.png" style="width: 24px; height: 24px;">
+            <div class="nav-text">我的</div>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+  </div>
 </template>
 
 <script>
-import { checking } from "../api/index";
+import {checking, getDictByDictType, modifying, outLanding} from "../api/index";
+import router from "@/router";
 
 export default {
   data() {
     return {
-      ruleForm: {
-        username: "",
-        password: "",
+      interestOptions: [],
+      userForm: {
+        id: '',
+        userName: '',
+        password: '',
+        name: '',
+        interest: [],
+        interestStr: '',
+        created: '',
+        modified: '',
+        type: ''
       },
-      rules: {},
-      isLoading: false,
     };
   },
   methods: {
-    async land() {
-      if (this.ruleForm.username === "" || this.ruleForm.password === "") {
-        alert("请检查账号和密码！");
-      } else {
-        this.isLoading = true;
-        try {
-          await userLanding(this.ruleForm.username, this.ruleForm.password);
-          this.isLoading = false;
-        } catch (error) {
-          this.isLoading = false;
-          alert("登录失败，请重试！");
+    outLand() {
+      outLanding()
+      router.push('/userLogin')
+    },
+    linkToIndex() {
+      router.push('/index');
+    },
+    linkToInfo() {
+      router.push('/info');
+    },
+    async checkUserInfo() {
+      try {
+        const response = await checking();
+        if (response && response.data) {
+          this.userForm.id = response.data.id
+          this.userForm.userName = response.data.userName;
+          this.userForm.password = response.data.password
+          this.userForm.name = response.data.name
+          this.userForm.interest = response.data.interest.split(',');
+          this.userForm.created = response.data.created
+          this.userForm.modified = response.data.modified
+          this.userForm.type = response.data.type
+        } else {
+          console.error("Invalid response structure:", response);
         }
+      } catch (error) {
+        console.error("Failed to fetch options:", error);
       }
     },
+    async getInterest() {
+      try {
+        const response = await getDictByDictType(300);
+        if (response && response.data) {
+          this.interestOptions = response.data.map((item) => ({
+            label: item.dictname,
+            value: item.dictcode,
+          }));
+        } else {
+          console.error("Invalid response structure:", response);
+        }
+      } catch (error) {
+        console.error("Failed to fetch options:", error);
+      }
+    },
+    upUserInfo() {
+      this.userForm.interestStr = this.userForm.interest.join(',')
+      modifying(this.userForm.name, this.userForm.interestStr)
+      this.checkUserInfo()
+      this.getInterest()
+      this.userForm.interestStr = ''
+    }
   },
   created() {
-    checking();
-  },
+    this.checkUserInfo()
+    this.getInterest()
+  }
 };
 </script>
 
-<style>
-.img-a {
-  position: absolute;
-  width: 100%;
-  top: -280rpx;
-  right: -100rpx;
-}
-.img-b {
-  position: absolute;
-  width: 50%;
+<style scoped>
+.bottom-nav {
+  position: fixed;
   bottom: 0;
-  left: -50rpx;
-  margin-bottom: -200rpx;
-}
-.t-login {
-  width: 600rpx;
-  margin: 0 auto;
-  font-size: 28rpx;
-  color: #000;
+  width: 100%;
+  background-color: #fff;
+  padding: 10px 0;
 }
 
-.t-login button {
-  font-size: 28rpx;
-  background: #5677fc;
-  color: #fff;
-  height: 90rpx;
-  line-height: 90rpx;
-  border-radius: 50rpx;
-  box-shadow: 0 5px 7px 0 rgba(86, 119, 252, 0.2);
-}
-
-.t-login input {
-  padding: 0 20rpx 0 120rpx;
-  height: 90rpx;
-  line-height: 90rpx;
-  margin-bottom: 50rpx;
-  background: #f8f7fc;
-  border: 1px solid #e9e9e9;
-  font-size: 28rpx;
-  border-radius: 50rpx;
-}
-
-.t-login .t-a {
-  position: relative;
-}
-
-.t-login .t-a image {
-  width: 40rpx;
-  height: 40rpx;
-  position: absolute;
-  left: 40rpx;
-  top: 28rpx;
-  border-right: 2rpx solid #dedede;
-  padding-right: 20rpx;
-}
-
-.t-login .t-b {
-  text-align: left;
-  font-size: 46rpx;
-  color: #000;
-  padding: 300rpx 0 120rpx 0;
-  font-weight: bold;
-}
-
-.t-login .t-c {
-  position: absolute;
-  right: 22rpx;
-  top: 22rpx;
-  background: #5677fc;
-  color: #fff;
-  font-size: 24rpx;
-  border-radius: 50rpx;
-  height: 50rpx;
-  line-height: 50rpx;
-  padding: 0 25rpx;
-}
-
-.t-login .t-d {
+.nav-item {
   text-align: center;
-  color: #999;
-  margin: 80rpx 0;
+  margin-bottom: 10px;
 }
 
-.t-login .t-e {
-  text-align: center;
-  width: 250rpx;
-  margin: 80rpx auto 0;
+.nav-text {
+  font-size: 12px;
 }
-
-.t-login .t-g {
-  float: left;
-  width: 50%;
-}
-
-.t-login .t-e image {
-  width: 50rpx;
-  height: 50rpx;
-}
-
-.t-login .t-f {
-  text-align: center;
-  margin: 200rpx 0 0 0;
-  color: #666;
-}
-
-.t-login .t-f text {
-  margin-left: 20rpx;
-  color: #aaaaaa;
-  font-size: 27rpx;
-}
-
-.t-login .uni-input-placeholder {
-  color: #000;
-}
-
-.cl {
-  zoom: 1;
-}
-
-.cl:after {
-  clear: both;
-  display: block;
-  visibility: hidden;
-  height: 0;
-  content: "\20";
+.nav-separator {
+  height: 1px;
+  background-color: #ccc;
+  margin: 20px 0;
 }
 </style>

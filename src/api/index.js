@@ -12,14 +12,35 @@ export const landing = (username, password) => {
         password: password,
     })
         .then((response) => {
-            console.log(response);
+            console.log(response.data.success);
             console.log(username + password);
             if (!response.data.success) {
                 alert(response.data.errorMsg)
             } else {
-                console.log(response)
                 // 存token
                 localStorage.setItem("token", response.data.data)
+                router.push('/main/home')
+            }
+        })
+}
+
+//管理员请求登录
+export const userLanding = (username, password) => {
+    console.log("开始登录")
+    return http.post("/common/login", {
+        // body传参
+        username: username,
+        password: password,
+    })
+        .then((response) => {
+            console.log(response.data.success);
+            console.log(username + password);
+            if (!response.data.success) {
+                alert(response.data.errorMsg)
+            } else {
+                // 存token
+                localStorage.setItem("token", response.data.data)
+                router.push('/index')
             }
         })
 }
@@ -60,13 +81,10 @@ export const outLanding = () => {
     }).then((response) => {
         console.log(response)
         if (response.data.success) {
-            alert(response.data.data)
             Cookies.remove("token")
-            router.push('/login')
         } else {
             alert(response.data.errorMsg)
             Cookies.remove("token")
-            router.push('/login')
         }
     })
 }
@@ -84,24 +102,25 @@ export const checking = () => {
             alert(response.data.errorMsg)
             if (response.data.errorMsg === '认证失败请重新登录') {
                 Cookies.remove('token')
-                router.push("/login")
+                router.push("/userLogin")
             }
+            throw new Error(response.data.errorMsg)
         } else {
-            console.log("我在传参");
-            const userInfo = response.data.data
-            store.dispatch("fetchUserInfo", userInfo)
+            return response.data; // 返回响应数据
         }
+    }).catch((error) => {
+        console.error("Failed to fetch data:", error);
+        throw error;
     })
 }
 
 // 修改用户个人资料
-export const modifying = (email, name, password) => {
+export const modifying = (name, interest) => {
     console.log("修改用户个人资料")
     console.log(localStorage.getItem("token"))
     return http.put("/user", {
-        email: email,
         name: name,
-        password: password
+        interest: interest
     }, {
         headers: {
             "Content-Type": "application/json",
@@ -112,11 +131,10 @@ export const modifying = (email, name, password) => {
             console.log(response)
             if (!response.data.success && response.data.errorMsg === '认证失败请重新登录') {
                 Cookies.remove('token')
-                router.push("/login")
+                router.push("/userLogin")
                 alert("认证失败请重新登录")
             } else {
                 checking()
-                alert(response.data.data)
             }
         })
 }
@@ -230,7 +248,7 @@ export const getDictByDictType = (id) => {
     }, {
         headers: {
             "Content-Type": "application/json",
-            "token": localStorage.getItem("token")
+            // "token": localStorage.getItem("token")
         },
     }).then((response) => {
         console.log(response);
@@ -238,7 +256,7 @@ export const getDictByDictType = (id) => {
             alert(response.data.errorMsg);
             if (response.data.errorMsg === '认证失败请重新登录') {
                 Cookies.remove('token');
-                router.push("/login");
+                router.push("/userLogin");
             }
             throw new Error(response.data.errorMsg);
         } else {
@@ -258,7 +276,7 @@ export const getDictWithParent = (id) => {
     }, {
         headers: {
             "Content-Type": "application/json",
-            "token": localStorage.getItem("token")
+            // "token": localStorage.getItem("token")
         },
     }).then((response) => {
         console.log(response);
@@ -266,7 +284,7 @@ export const getDictWithParent = (id) => {
             alert(response.data.errorMsg);
             if (response.data.errorMsg === '认证失败请重新登录') {
                 Cookies.remove('token');
-                router.push("/login");
+                router.push("/userLogin");
             }
             throw new Error(response.data.errorMsg);
         } else {
@@ -334,7 +352,7 @@ export const updateCurrentEngine = (dictcode) => {
     });
 }
 
-//根据id删除广告
+//根据id启停广告
 export const upStatus = (id, status) => {
     console.log("启停广告");
     return http.post("/ad/upStatus", {
@@ -441,7 +459,7 @@ export const getDictByParent = (id) => {
     }, {
         headers: {
             "Content-Type": "application/json",
-            "token": localStorage.getItem("token")
+            // "token": localStorage.getItem("token")
         },
     }).then((response) => {
         console.log(response);
@@ -449,7 +467,7 @@ export const getDictByParent = (id) => {
             alert(response.data.errorMsg);
             if (response.data.errorMsg === '认证失败请重新登录') {
                 Cookies.remove('token');
-                router.push("/login");
+                router.push("/userLogin");
             }
             throw new Error(response.data.errorMsg);
         } else {

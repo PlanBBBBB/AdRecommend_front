@@ -3,9 +3,9 @@
     <div class="login-info">
       <div class="login-left flex-cen-xy">
         <img
-          class="login-left-img"
-          src="@/assets/left-img.png"
-          alt="login left img"
+            class="login-left-img"
+            src="@/assets/left-img.png"
+            alt="login left img"
         />
       </div>
 
@@ -16,38 +16,39 @@
         </div>
 
         <el-form
-          :model="ruleForm"
-          :rules="rules"
-          ref="ruleForm"
-          class="login-form"
+            :model="ruleForm"
+            :rules="rules"
+            ref="ruleForm"
+            class="login-form"
         >
-          <el-form-item class="login-form-item" label="" prop="username">
+          <el-form-item class="login-form-item" label="账号" prop="username">
             <el-input
-              v-model="ruleForm.username"
-              placeholder="请输入账号(admin)"
-              class="login-input"
-              clearable
-              @keyup.enter.native="land"
+                v-model="ruleForm.username"
+                placeholder="请输入账号(admin)"
+                class="login-input"
+                clearable
+                @keyup.enter.native="land"
             ></el-input>
           </el-form-item>
 
-          <el-form-item class="login-form-item" label="" prop="password">
+          <el-form-item class="login-form-item" label="密码" prop="password">
             <el-input
-              v-model="ruleForm.password"
-              placeholder="请输入密码(123456)"
-              type="password"
-              class="login-input"
-              clearable
-              @keyup.enter.native="land"
+                v-model="ruleForm.password"
+                placeholder="请输入密码(123456)"
+                type="password"
+                class="login-input"
+                clearable
+                @keyup.enter.native="land"
             ></el-input>
           </el-form-item>
 
           <el-button
-            class="login-btn"
-            type="primary"
-            @click="land"
-            :loading="isLoading"
-            >登录</el-button
+              class="login-btn"
+              type="primary"
+              @click="land"
+              :loading="isLoading"
+          >登录
+          </el-button
           >
         </el-form>
       </div>
@@ -57,10 +58,10 @@
     </div>
   </div>
 </template>
-  
+
 <script>
-import { landing } from "../api/index";
-import router from "@/router";
+import {landing} from "../api/index";
+
 export default {
   data() {
     return {
@@ -70,12 +71,12 @@ export default {
       },
       rules: {
         username: [
-          { required: true, message: "请输入账号", trigger: "blur" },
-          { min: 3, max: 10, message: "长度在3-10个字符", trigger: "blur" },
+          {required: true, message: "请输入账号", trigger: "blur"},
+          {min: 3, max: 10, message: "长度在3-10个字符", trigger: "blur"},
         ],
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 3, max: 10, message: "长度在3-10个字符", trigger: "blur" },
+          {required: true, message: "请输入密码", trigger: "blur"},
+          {min: 3, max: 10, message: "长度在3-10个字符", trigger: "blur"},
         ],
       },
       isLoading: false,
@@ -84,29 +85,24 @@ export default {
   methods: {
     async land() {
       if (
-        this.ruleForm.username === "" ||
-        this.ruleForm.password === "" ||
-        this.ruleForm.username.length > 10 ||
-        this.ruleForm.password.length > 10 ||
-        this.ruleForm.username.length < 3 ||
-        this.ruleForm.password.length < 3
+          this.ruleForm.username !== "admin" ||
+          this.ruleForm.password === "" ||
+          this.ruleForm.password.length > 10 ||
+          this.ruleForm.password.length < 3
       ) {
         alert("请检查账号和密码！");
       } else {
         console.log("前往登录");
         await landing(this.ruleForm.username, this.ruleForm.password);
-        await router.push('/main/home')
-        console.log("到我了");
       }
     },
-    openNewPage () {
+    openNewPage() {
       window.open("https://beian.miit.gov.cn/ ", "_blank");
     },
-
   },
 };
 </script>
-  
+
 <style scoped>
 html, body {
   height: 100%;

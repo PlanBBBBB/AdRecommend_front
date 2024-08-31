@@ -1,52 +1,55 @@
 <template>
-    <div class="header-container">
-        <div class="left-box">
-            <el-button icon="el-icon-menu" size="mini" @click="handleMenu"></el-button>
-        </div>
-        <div class="right-box">
-            <el-button type="danger" size="mini" @click="outLand">退出登录</el-button>
-        </div>
+  <div class="header-container">
+    <div class="left-box">
+      <el-button icon="el-icon-menu" size="mini" @click="handleMenu"></el-button>
     </div>
+    <div class="right-box">
+      <el-button type="danger" size="mini" @click="outLand">退出登录</el-button>
+    </div>
+  </div>
 </template>
 <script>
-import { outLanding } from "../api"
-export default{
-    data(){
-        return{
+import {outLanding} from "../api"
+import router from "@/router";
 
-        } 
+export default {
+  data() {
+    return {}
+  },
+  methods: {
+    handleMenu() {
+      this.$store.commit('isCollapseMenu')
     },
-    methods:{
-        handleMenu(){
-            this.$store.commit('isCollapseMenu')
-        },
-        outLand(){
-            outLanding()
-        }
+    outLand() {
+      outLanding()
+      router.push('/login')
     }
+  }
 }
 </script>
 <style lang="less" scoped>
-.header-container{
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 60px;
+  background-color: #ffffff;
+
+  .el-button {
+    margin: 0 20px;
+  }
+
+  .right-box {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    width: 100%;
-    height: 60px;
-    background-color: #ffffff;
-    
-    .el-button{
-     margin: 0 20px;   
+    margin: 0 20px;
+
+    img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
     }
-    .right-box{
-        display: flex;
-        align-items: center;
-        margin: 0 20px;
-        img{
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-        }
-    }
+  }
 }
 </style>
