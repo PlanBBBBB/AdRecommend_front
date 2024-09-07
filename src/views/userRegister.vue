@@ -1,15 +1,14 @@
 <template>
-  <div class="t-login">
-    <!-- 页面装饰图片 -->
-    <img src="@/assets/login/2.png" alt="login/2.png" class="img-a">
-    <img src="@/assets/login/3.png" alt="login/3.png" class="img-b">
+  <div class="t-register">
+
     <!-- 标题 -->
-    <div class="t-b">欢迎回来！</div>
+    <div class="t-b">Create Account</div>
+    <img src="@/assets/login/back.png" alt="login/back.png" class="login-bg">
     <el-form class="cl" :model="registerForm" :rules="rules" ref="registerForm">
       <div class="t-a">
-        <img src="@/assets/login/sj.png" alt="login/sj.png">
-        <el-form-item label="账号" prop="username">
+        <el-form-item prop="username" class="from-item">
           <el-input
+              prefix-icon="el-icon-user"
               type="text"
               placeholder="请输入账号"
               maxlength="11"
@@ -20,9 +19,9 @@
         </el-form-item>
       </div>
       <div class="t-a">
-        <img src="@/assets/login/yz.png" alt="login/yz.png">
-        <el-form-item label="密码" prop="password">
+        <el-form-item prop="password" class="from-item">
           <el-input
+              prefix-icon="el-icon-lock"
               type="password"
               placeholder="请输入密码"
               maxlength="6"
@@ -33,9 +32,9 @@
         </el-form-item>
       </div>
       <div class="t-a">
-        <img src="@/assets/login/yz.png" alt="login/yz.png">
-        <el-form-item label="昵称" prop="name">
+        <el-form-item prop="name" class="from-item">
           <el-input
+              prefix-icon="el-icon-user"
               type="text"
               placeholder="请输入昵称"
               maxlength="10"
@@ -46,12 +45,12 @@
         </el-form-item>
       </div>
       <div class="t-a">
-        <img src="@/assets/login/yz.png" alt="login/yz.png">
-        <el-form-item label="" prop="interest">
+        <el-form-item prop="interest" class="from-item">
           <el-select v-model="registerForm.interest"
                      placeholder="请选择兴趣标签（3到5个）"
                      clearable
-                     multiple>
+                     multiple
+                     style="width: 100%">
             <el-option
                 v-for="item in interestOptions"
                 :key="item.value"
@@ -61,14 +60,16 @@
           </el-select>
         </el-form-item>
       </div>
-      <el-button @click="land" :loading="isLoading">注 册</el-button>
+      <el-button type="primary" @click="land" :loading="isLoading" class="login-btn">Sign up</el-button>
     </el-form>
 
-    <div @click="linkLogin" class="register">
-      已有账号？点我登录
+
+    <div class="or-container">
+      or
     </div>
-    <div @click="openNewPage" class="new-page">
-      备案号：粤ICP备2024295504号
+    <el-button @click="linkLogin" class="login-btn">Log in</el-button>
+
+    <div class="end-container">
     </div>
   </div>
 </template>
@@ -125,9 +126,6 @@ export default {
         this.registerForm.interestStr = ''
       }
     },
-    openNewPage() {
-      window.open("https://beian.miit.gov.cn/ ", "_blank");
-    },
     linkLogin() {
       router.push('/userLogin');
     },
@@ -155,54 +153,28 @@ export default {
 </script>
 
 <style>
-.img-a {
-  position: absolute;
-  width: 100%;
-  top: -280rpx;
-  right: -100rpx;
+
+.login-btn {
+  width: 80%;
+  font-weight: bold;
 }
 
-.img-b {
-  position: absolute;
-  width: 50%;
-  bottom: 0;
-  left: 0;
-  margin-bottom: -200rpx;
-}
-
-.t-login {
+.t-register {
   width: 600rpx;
   margin: 0 auto;
   font-size: 28rpx;
   color: #000;
 }
 
-.t-login button {
-  font-size: 28rpx;
-  background: #5677fc;
-  color: #fff;
-  height: 90rpx;
-  line-height: 90rpx;
-  border-radius: 50rpx;
-  box-shadow: 0 5px 7px 0 rgba(86, 119, 252, 0.2);
-}
-
-.t-login input {
-  padding: 0 20rpx 0 120rpx;
-  height: 90rpx;
-  line-height: 90rpx;
-  margin-bottom: 50rpx;
-  background: #f8f7fc;
-  border: 1px solid #e9e9e9;
-  font-size: 28rpx;
-  border-radius: 50rpx;
-}
-
-.t-login .t-a {
+.t-register .t-a {
   position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center;
 }
 
-.t-login .t-a image {
+.t-register .t-a image {
   width: 40rpx;
   height: 40rpx;
   position: absolute;
@@ -212,64 +184,15 @@ export default {
   padding-right: 20rpx;
 }
 
-.t-login .t-b {
+.t-register .t-b {
   text-align: left;
-  font-size: 46rpx;
+  font-size: 23px;
   color: #000;
-  padding: 300rpx 0 120rpx 0;
   font-weight: bold;
+  height: 23px;
+  padding: 10px;
 }
 
-.t-login .t-c {
-  position: absolute;
-  right: 22rpx;
-  top: 22rpx;
-  background: #5677fc;
-  color: #fff;
-  font-size: 24rpx;
-  border-radius: 50rpx;
-  height: 50rpx;
-  line-height: 50rpx;
-  padding: 0 25rpx;
-}
-
-.t-login .t-d {
-  text-align: center;
-  color: #999;
-  margin: 80rpx 0;
-}
-
-.t-login .t-e {
-  text-align: center;
-  width: 250rpx;
-  margin: 80rpx auto 0;
-}
-
-.t-login .t-g {
-  float: left;
-  width: 50%;
-}
-
-.t-login .t-e image {
-  width: 50rpx;
-  height: 50rpx;
-}
-
-.t-login .t-f {
-  text-align: center;
-  margin: 200rpx 0 0 0;
-  color: #666;
-}
-
-.t-login .t-f text {
-  margin-left: 20rpx;
-  color: #aaaaaa;
-  font-size: 27rpx;
-}
-
-.t-login .uni-input-placeholder {
-  color: #000;
-}
 
 .cl {
   zoom: 1;
@@ -283,18 +206,41 @@ export default {
   content: "\20";
 }
 
-.register {
-  font-size: 14px;
-  color: blue;
+.from-item {
+  width: 80%;
 }
 
-.new-page {
+.or-container {
+  text-align: center;
+  position: relative;
+  font-size: 16px;
+  color: #666;
+  width: 80%; /* 调整宽度为70% */
+  margin: 0 auto; /* 使用margin自动居中 */
+  height: 25px;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center;
+}
+
+.or-container::before,
+.or-container::after {
+  content: "";
   position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 14px;
-  color: blue;
-  cursor: pointer;
+  top: 50%;
+  width: 45%; /* 保持45%的宽度，因为or-container的宽度已经缩小 */
+  border-top: 1px solid #ccc;
+}
+
+.or-container::before {
+  left: 0;
+}
+
+.or-container::after {
+  right: 0;
+}
+
+.end-container {
+  height: 20px;
 }
 </style>

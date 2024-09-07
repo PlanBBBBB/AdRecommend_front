@@ -24,7 +24,7 @@ export const landing = (username, password) => {
         })
 }
 
-//管理员请求登录
+// 用户请求登录
 export const userLanding = (username, password) => {
     console.log("开始登录")
     return http.post("/common/login", {
@@ -239,6 +239,36 @@ export const pageBehavior = (action, currentPage, pageSize) => {
         }
     })
 }
+
+// 根据API获取广告
+export const getAdByApi = (num) => {
+    console.log("根据API获取广告");
+    return http.post("/ad/recommendByAI", {
+        id: num
+    }, {
+        headers: {
+            "Content-Type": "application/json",
+            "token": localStorage.getItem("token")
+        },
+    }).then((response) => {
+        console.log(response);
+        if (!response.data.success) {
+            alert(response.data.errorMsg);
+            if (response.data.errorMsg === '认证失败请重新登录') {
+                Cookies.remove('token');
+                router.push("/userLogin");
+            }
+            throw new Error(response.data.errorMsg);
+        } else {
+            return response.data;  // 返回响应数据
+        }
+    }).catch((error) => {
+        console.error("Failed to fetch data:", error);
+        throw error;
+    });
+
+}
+
 
 // 根据dictType查询字典
 export const getDictByDictType = (id) => {

@@ -2,45 +2,26 @@
   <div>
     <h2>AIGC 广告推荐系统</h2>
     <!-- 顶部轮播图 -->
-    <el-carousel height="150px">
-      <el-carousel-item v-for="item in bannerList" :key="item">
-        <h3 class="small">nihao</h3>
-        <img src="@/assets/user/index-active.png" alt="">
-      </el-carousel-item>
-    </el-carousel>
+    <div class="banner">
+      <el-carousel :interval="4000" height="190px">
+        <el-carousel-item v-for="item in bannerList" :key="item.id">
+          <img :src="item.image" alt="轮播栏广告图" style="width: 100%; height: 100%;" @click="linkToAdInfo(item.adId)">
+        </el-carousel-item>
+      </el-carousel>
+    </div>
 
-
-    <el-row>
-      <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
-        <el-card :body-style="{ padding: '0px' }" shadow="hover">
-          <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-               class="image">
-          <div style="padding: 14px;">
-            <span>好吃的汉堡</span>
-            <div class="bottom clearfix">
-              <time class="time">{{ currentDate }}</time>
-              <el-button type="text" class="button">操作按钮</el-button>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-
-    <el-row>
-      <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
-        <el-card :body-style="{ padding: '0px' }" shadow="hover">
-          <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-               class="image">
-          <div style="padding: 14px;">
-            <span>好吃的汉堡</span>
-            <div class="bottom clearfix">
-              <time class="time">{{ currentDate }}</time>
-              <el-button type="text" class="button">操作按钮</el-button>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+    <!-- 卡片栏广告 -->
+    <div class="card">
+      <el-row :gutter="20">
+        <el-col :span="12" v-for="item in productList" :key="item.id" style="padding: 8px;">
+          <el-card :body-style="{ padding: '0px' ,height: '110px' }"
+                   style="height: 110px; width: 100%; object-fit: cover; overflow: hidden;">
+            <img :src="item.image" alt="卡片栏广告图" style="width: 100%; height: 100%; object-fit: cover;"
+                 @click="linkToAdInfo(item.adId)">
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
 
 
     <!-- 底部导航 -->
@@ -66,60 +47,174 @@
 
 <script>
 import router from "@/router";
+import {getAdByApi} from "@/api";
 
 export default {
   data() {
     return {
-      bannerList: [
-        {id: 1, image: 'https://example.com/banner1.jpg'},
-        {id: 2, image: 'https://example.com/banner2.jpg'},
-        // 更多轮播图
-      ],
-      productList: [
-        {id: 1, image: 'https://example.com/product1.jpg', name: '鲜花玫瑰'},
-        {id: 2, image: 'https://example.com/product2.jpg', name: '鲜花玫瑰'},
-        // 更多商品
-      ],
+      // 轮播图广告列表
+      bannerList: [],
+      // 卡片栏广告列表
+      productList: [],
     };
   },
   methods: {
+    // 跳转到首页
     linkToIndex() {
       router.push('/index');
     },
+    // 跳转到个人信息页
     linkToInfo() {
       router.push('/info');
     },
-    getBannerList() {
-      console.log("获取顶部轮播图广告")
-
+    // 根据API获取广告
+    async getAdByAPI() {
+      try {
+        const response = await getAdByApi(7);
+        if (response && response.data) {
+          if (response && Array.isArray(response.data)) {
+            // 将前三个广告信息放入 bannerList
+            this.bannerList = response.data.slice(0, 3).map((item, index) => ({
+              id: index + 1, // id 从1开始
+              image: item.imgUrl,
+              adId: item.id, // 使用 item 中的 id 作为 adId
+            }));
+            // 将剩下的广告信息放入 productList
+            this.productList = response.data.slice(3).map((item, index) => ({
+              id: index + 1 + 3, // id 从1开始，加上前面的3个广告
+              image: item.imgUrl,
+              adId: item.id, // 使用 item 中的 id 作为 adId
+            }));
+          } else {
+            console.error("Invalid response structure:", response);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch options:", error);
+      }
     },
-    getProductList() {
-      console.log("获取卡片栏广告")
+    // 根据SSE获取广告
+    async getAdBySSE() {
+      try {
+        const headers = new Headers({
+          'Content-Type': 'text/event-stream',
+          'token': localStorage.getItem("token")
+        });
+
+        const response = await fetch('/adRecommend/ad/recommendByAISSe?id=7', {
+          headers: headers
+        });
+
+        // 创建一个可读流适配器
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let currentMessage = '';
+        let done = false;
+
+        const pushEvent = (data) => {
+          console.log(data);
+          // 解析数据
+          let dataStr = data.substring(1, data.length - 1)
+          let dataArr = dataStr.split(",")
+          // 提取 id 和 imgUrl
+          const id = dataArr[0];
+          const imgUrl = dataArr[1];
+
+          // 将数据添加到对应的列表中
+          if (this.bannerList.length < 3) {
+            console.log("添加到 bannerList");
+            this.bannerList.push({
+              id: this.bannerList.length + 1,
+              image: imgUrl,
+              adId: id,
+            });
+          } else if (this.productList.length < 4) {
+            this.productList.push({
+              id: this.productList.length + 1,
+              image: imgUrl,
+              adId: id,
+            });
+          }
+        };
+
+        const pump = () => {
+          if (done) return;
+          reader.read().then(({value, done: d}) => {
+            if (d) {
+              done = true;
+              this.closeSSE();
+              return;
+            }
+            const chunk = decoder.decode(value, {stream: true});
+            currentMessage += chunk;
+            console.log(currentMessage);
+            // 如果 currentMessage 结束，处理它
+            if (currentMessage.endsWith('\n')) {
+              const messages = currentMessage.split('\n').filter(m => m.trim());
+              messages.forEach((message) => {
+                const eventData = message.replace(/^data:/, '').trim();
+                if (eventData) {
+                  pushEvent(eventData);
+                }
+              });
+              currentMessage = ''; // 重置 currentMessage
+            } else {
+              // 如果 currentMessage 没有结束，继续读取下一个块
+              pump();
+            }
+            pump()
+          });
+        };
+
+        pump();
+
+        this.eventSource = {
+          close: () => {
+            reader.cancel();
+            this.eventSource = null;
+          },
+          onerror: (error) => {
+            console.error('Error occurred:', error);
+            this.eventSource.close();
+          }
+        };
+      } catch (error) {
+        console.error("Failed to fetch SSE:", error);
+      }
+    },
+    closeSSE() {
+      if (this.eventSource) {
+        this.eventSource.close();
+        this.eventSource = null;
+      }
+    },
+
+    // 跳转到广告详情页
+    linkToAdInfo(adId) {
+      console.log("跳转到广告详情页", adId)
 
     }
   },
   created() {
-    this.getBannerList()
-    this.getProductList()
-  }
+    this.getAdBySSE();
+    // this.getAdByAPI();
+  },
+  beforeDestroy() {
+    this.closeSSE();
+  },
 };
 </script>
 
 <style scoped>
-.el-carousel__item h3 {
-  color: #475669;
-  font-size: 14px;
-  opacity: 0.75;
-  line-height: 150px;
-  margin: 0;
+
+.banner {
+  height: 190px;
+  padding: 10px;
 }
 
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
-}
-
-.el-carousel__item:nth-child(2n+1) {
-  background-color: #d3dce6;
+.card {
+  height: 290px;
+  padding: 10px;
 }
 
 .bottom-nav {
@@ -127,7 +222,7 @@ export default {
   bottom: 0;
   width: 100%;
   background-color: #fff;
-  padding: 10px 0;
+  padding: 4px 0;
 }
 
 .nav-item {
@@ -142,6 +237,6 @@ export default {
 .nav-separator {
   height: 1px;
   background-color: #ccc;
-  margin: 20px 0;
+  margin: 10px 0;
 }
 </style>
