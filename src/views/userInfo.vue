@@ -2,33 +2,45 @@
   <div>
     <h2>AIGC 广告推荐系统</h2>
     <div>
-      用户名：
-      {{ userForm.userName }}
-      <br>
-      昵称：
-      <el-input v-model="userForm.name" clearable
-                prefix-icon="el-icon-s-custom">
-      </el-input>
-      <br>
-      注册时间：{{ userForm.created }}
-      <br>
-      兴趣标签：
-      <el-select v-model="userForm.interest"
-                 placeholder="请选择兴趣标签（3到5个）"
-                 multiple>
-        <el-option
-            v-for="item in interestOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-        ></el-option>
-      </el-select>
-      <br>
-      <el-button type="primary" @click="upUserInfo">保 存</el-button>
-      <br>
-      <el-button type="danger" @click="outLand">退出登录</el-button>
+
+      <div class="username">
+        用户名：{{ userForm.userName }}
+      </div>
+
+      <div class="username">
+        注册时间：{{ userForm.created }}
+      </div>
+
+      <div class="name">
+        昵称：
+        <el-input style="width: 80%"
+            v-model="userForm.name" clearable
+                  prefix-icon="el-icon-user">
+        </el-input>
+      </div>
+
+      <div class="interest">
+        兴趣标签：
+        <el-select v-model="userForm.interest"
+                   placeholder="请选择兴趣标签（3到5个）"
+                   multiple>
+          <el-option
+              v-for="item in interestOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="save">
+        <el-button style="width: 100px" type="primary" @click="upUserInfo">保 存</el-button>
+      </div>
+
+      <el-button style="width: 100px" type="danger" @click="outLand">退出登录</el-button>
 
     </div>
+
+    <img src="@/assets/login/info.png" alt="login/info.png" class="login-bg">
 
     <!-- 底部导航 -->
     <div class="bottom-nav">
@@ -133,12 +145,41 @@ export default {
 </script>
 
 <style scoped>
+
+.login-bg {
+  width: 100%;
+  height: 100%;
+}
+
+.username {
+  text-align: left;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.name {
+  text-align: left;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.interest {
+  text-align: left;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.save {
+  text-align: center;
+  padding: 10px;
+}
+
 .bottom-nav {
   position: fixed;
   bottom: 0;
   width: 100%;
   background-color: #fff;
-  padding: 10px 0;
+  padding: 4px 0;
 }
 
 .nav-item {
@@ -149,9 +190,10 @@ export default {
 .nav-text {
   font-size: 12px;
 }
+
 .nav-separator {
   height: 1px;
   background-color: #ccc;
-  margin: 20px 0;
+  margin: 10px 0;
 }
 </style>

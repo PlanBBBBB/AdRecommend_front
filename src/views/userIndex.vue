@@ -114,20 +114,12 @@ export default {
   margin: 0;
 }
 
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
-}
-
-.el-carousel__item:nth-child(2n+1) {
-  background-color: #d3dce6;
-}
-
 .bottom-nav {
   position: fixed;
   bottom: 0;
   width: 100%;
   background-color: #fff;
-  padding: 10px 0;
+  padding: 4px 0;
 }
 
 .nav-item {
@@ -142,6 +134,6 @@ export default {
 .nav-separator {
   height: 1px;
   background-color: #ccc;
-  margin: 20px 0;
+  margin: 10px 0;
 }
 </style>
